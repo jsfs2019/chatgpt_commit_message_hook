@@ -102,6 +102,9 @@ def get_openai_chat_response(prompt, model, api_key, proxy_server=None):
     # Process the API response
     if response.status_code == 200:
         messages = response.json()["choices"][0]["message"]["content"]
+        # if messages is quoted "", remove it
+        if messages.startswith('"') and messages.endswith('"'):
+            messages = messages[1:-1]
         return messages
     else:
         print("Error:", response.text)
