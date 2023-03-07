@@ -6,6 +6,7 @@ import configparser
 import requests
 import git
 import re
+from gitdb.exc import BadName
 
 
 COMMIT_MSG_FILE = sys.argv[1]
@@ -29,8 +30,11 @@ def count_staged_changes(repo_path="."):
     index = repo.index
 
     # Get the staged changes as a text diff
-    # staged_diff = repo.diff("HEAD", "index", create_patch=True)
-    staged_diff = index.diff("HEAD", create_patch=True, R=True)
+    try:
+        staged_diff = index.diff("HEAD", create_patch=True, R=True)
+    except BadName:
+        print("Error: Could not find the HEAD reference.")
+        return {}
 
     changes_dict = {}
     for diff in staged_diff:
