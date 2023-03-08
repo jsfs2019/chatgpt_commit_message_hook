@@ -183,8 +183,10 @@ response_text = get_openai_chat_response(
     proxy_server=proxy,
 )
 
-
-content_whole_file = response_text + current_commit_file_content
+if response_text:
+    content_whole_file = response_text + current_commit_file_content
+else:
+    content_whole_file = current_commit_file_content
 
 with open(COMMIT_MSG_FILE, 'w') as f:
     f.write(content_whole_file)
