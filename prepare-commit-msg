@@ -152,9 +152,11 @@ def initialize_openai_api():
     # Read the proxy from the configuration
     proxy = config["openai"]["proxy"].strip('"').strip("'")
     # Read the maximum number of changed lines from the configuration
-    max_changed_lines = config["openai"]["max_changed_lines"]
-    if max_changed_lines:
+    max_changed_lines = config["openai"].get("max_changed_lines")
+    try:
         max_changed_lines = int(max_changed_lines)
+    except ValueError:
+        max_changed_lines = 80
 
     # Check if the maximum number of changed lines is valid
     if max_changed_lines is None or max_changed_lines <= 0:
